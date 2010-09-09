@@ -1,0 +1,242 @@
+<html>
+<head>
+	<title>8Protons - Riaktive: Riak DB Management Tool</title>
+	<link href="/riak/8protons.com_riaktive/favicon.ico" rel="shortcut icon">
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/jquery.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/json2.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/riak.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/riaktive.js"></script>
+  <link rel="stylesheet" href="/riak/8protons.com_riaktive/energycore.css" type="text/css" media="screen" />
+	<script type="text/javascript">
+		// Hello! Hallo! Yo! Ahoj! Hola! and more :D
+		var page = new $.riaktive.BucketPage();
+
+		$(document).ready(function() {
+			// Get Sidebar
+			$.riaktive.sidebar();
+
+			page.init();
+
+			// Show/hide the properties table
+			$('#bucket-prop-button').click(function() {
+				$('#bucket-prop-table-div').slideToggle();
+			});
+			
+			$('#perpage').change(page.per_page);					
+				
+			// Up! I mean Next page
+			$('#riaktive-table tbody.nav .next').click(page.next_page);
+
+			// Previous page
+			$('#riaktive-table tbody.nav .prev').click(page.prev_page);
+			
+			// Go to page
+			$('#page-number-button').click(page.go_to_page);
+
+			// Go to document
+			$('#jump-to-button').click(page.jump_to);
+			
+			/*Add Document Functions*/
+			// Content Type chooser
+			$('#content-type-select').change(page.content_type_select);
+			
+			// Text Field
+			$('#add-document-div input#radio-text').click(page.select_text_type);
+
+			// File Field
+			$('#add-document-div input#radio-file').click(page.select_file_type);
+			
+			$('#content #add-document-button').fancybox({href: "#add-document-div", onStart: page.add_document_box_onstart});
+
+			$('#add-document-div #save-document-button').click(page.save_document);
+
+			$('#add-document-div #riak-links button.add').click(page.add_link_input);
+
+			// Add live-function to delete element of riak-links list
+			$('#add-document-div #riak-links button.delete').live('click', function() {
+				$(this).parent().remove();
+			});
+
+			$('#add-document-div #riak-links-title').click(function() {
+				$('#add-document-div #riak-links').slideToggle();
+			});
+
+			// File handling functions
+			$('#add-document-div #stop-read-file').click(page.stop_read_file);
+
+			$('#add-document-div #file').change(page.handle_file_select);
+
+		}); // End of Document ready
+		
+	</script>
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper"><a href="/riak/8protons.com_riaktive/index.html">Overview</a>
+		</div>
+	</div>
+	<div id="content">
+		<div class="wrapper">			
+			<div id="control-panel">
+				<div class="fleft"><button id="add-document-button" class="add">Add Document</button></div>
+				<div class="fright">
+					Jump to Document with ID: <input id="jump-to-input" type="text"/><button id="jump-to-button" class="right">Jump!</button>
+				</div>
+			</div>
+
+			<button id="bucket-prop-button" class="left fright">Bucket Propeties</button>
+			<h1 id="bucket_name_title">Bucket Name: </h1>
+			<div id="bucket-prop-table-div" style="display:none;">
+				<span class="desc">Change Carefully</span>
+				<table cellspacing="0" id="prop-table" class="riaktive-table">
+							<caption>Properties</caption>
+							<thead>
+								<tr>
+									<th>Property Name</th>
+									<th class="count">Property Value</th>
+								</tr>
+							</thead>
+							<tbody class="content"></tbody>
+				</table>
+			</div>
+			<table cellspacing="0" id="riaktive-table" class="riaktive-table">
+						<caption>Documents</caption>
+						<thead>
+							<tr>
+							  <th>Document Name</th>
+								<th class="actions">Actions</th>
+							</tr>
+						</thead>
+						<tbody class="nav">
+							<tr>
+							  <td colspan="5">
+									<label class="fright">
+										Rows per page: 
+										<select id="perpage">
+											<option selected="">10</option>
+											<option>20</option>
+											<option>50</option>
+										</select>
+									</label>
+							      <button class="prev left">Previous Page</button> | Page: <input id="page-number-input" type="text" size="8" /><button id="page-number-button" class="right">Go</button> | <button class="next right">Next Page</button>
+										<p><span>Showing 0-0 of 0 documents</span></p>
+							  </td>
+							</tr>
+				</tbody>
+						<tbody class="content"></tbody>
+						<tbody class="nav">
+							<tr>
+							  <td colspan="5">
+							      <button class="prev left">Previous Page</button> | <button class="next right">Next Page</button> <br /> <p><span>Showing 0-0 of 0 documents</span></p>
+							  </td>
+							</tr>
+				</tbody>
+			</table>
+			<div id="footer">2010 &copy; Calculated on a <a href="http://8protons.com">8Protons</a> Quantum Computer</div>
+		</div>
+	</div> <!--End of Content-->
+	<div id="sidebar"></div>
+<!--Colorbox Elements-->
+<div style='display:none'>
+			<div id='add-document-div' style='padding:10px; background:#fff;'>
+				
+<h1>Add Document: </h1>
+<h3>Key</h3>
+<input type="text" id="key" size="68"/>
+<p> <span class="desc">Leave empty if you want to create document with riak-generated key</span></p>
+
+	<h3>Content Type</h3>
+<select id="content-type-select">
+<option selected value="default">Default type</option>
+<optgroup label="Multipurpose files">
+          <option type="both" value="application/json">application/json: JavaScript Object Notation JSON</option>
+          <option value="application/javascript">application/javascript: JavaScript</option>
+					<option value="text/html">text/html: HTML</option>
+					<option value="text/plain">text/plain: Textual data</option>
+          <option value="text/css">text/css: Cascading Style Sheets</option>
+          <option value="application/octet-stream">application/octet-stream: Arbitrary binary data</option>
+          <option value="application/ogg">application/ogg: Ogg, a multimedia bitstream container format</option>
+          <option value="application/pdf">application/pdf: Portable Document Format</option>
+          <option value="application/soap+xml">application/soap+xml: SOAP</option>
+          <option value="application/xhtml+xml">application/xhtml+xml: XHTML</option>
+          <option value="application/xml-dtd">application/xml-dtd: DTD files</option>
+          <option value="application/zip">application/zip: ZIP archive files</option>
+          <option value="application/x-rar-compressed">application/x-rar-compressed: RAR archive files</option>
+          <option value="application/x-tar">application/x-tar: Tarball files</option>
+</optgroup>
+<optgroup label="Audio">
+          <option value="audio/mpeg">audio/mpeg: MP3 or other MPEG audio</option>
+          <option value="audio/ogg">audio/ogg: Ogg Vorbis, Speex, Flac and other audio</option>
+          <option value="audio/vorbis">audio/vorbis: Vorbis encoded audio</option>
+          <option value="audio/x-ms-wma">audio/x-ms-wma: Windows Media Audio</option>
+          <option value="audio/vnd.rn-realaudio">audio/vnd.rn-realaudio: RealAudio</option>
+          <option value="audio/vnd.wave">audio/vnd.wave: WAV audio</option>
+</optgroup>
+<optgroup label="Image">
+          <option value="image/gif">image/gif: GIF image</option>
+          <option value="image/jpeg">image/jpeg: JPEG image</option>
+          <option value="image/png">image/png: Portable Network Graphics</option>
+          <option value="image/svg+xml">image/svg+xml: SVG vector image</option>
+          <option value="image/tiff">image/tiff: Tag Image File Format</option>
+          <option value="image/vnd.microsoft.icon">image/vnd.microsoft.icon: ICO image</option>
+</optgroup>
+<optgroup label="Multipart">
+          <option value="multipart/mixed">multipart/mixed: MIME E-mail</option>
+          <option value="multipart/alternative">multipart/alternative: MIME E-mail</option>
+          <option value="multipart/related">multipart/related: MIME E-mail</option>
+          <option value="multipart/form-data">multipart/form-data: MIME Webform</option>
+          <option value="multipart/signed">multipart/signed</option>
+          <option value="multipart/encrypted">multipart/encrypted</option>
+</optgroup>
+<optgroup label="Human-readable text and source code">
+          <option value="text/csv">text/csv: Comma-separated values</option>
+          <option value="text/javascript">text/javascript (Obsolete): JavaScript</option>
+          <option value="text/xml">text/xml: Extensible Markup Language</option>
+</optgroup>
+<optgroup label="Video">
+          <option value="video/mpeg">video/mpeg: MPEG-1 vide with multiplexed audio</option>
+          <option value="video/mp4">video/mp4: MP4 video</option>
+          <option value="video/ogg">video/ogg: Ogg Theora or other vide (with audio)</option>
+          <option value="video/quicktime">video/quicktime: QuickTime video</option>
+          <option value="video/webm">video/webm: WebM open media format</option>
+          <option value="video/x-ms-wmv">video/x-ms-wmv: Windows Media Video</option>
+</optgroup>
+<optgroup label="Non-standard files">
+          <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded Form Encoded Data</option>
+          <option value="application/x-dvi">application/x-dvi: device-independent document in DVI format</option>
+          <option value="application/x-latex">application/x-latex: LaTeX files</option>
+          <option value="application/x-font-ttf">application/x-font-ttf: TrueType Font</option>
+          <option value="application/x-shockwave-flash">application/x-shockwave-flash: Adobe Flash files for example with the extension .swf</option>
+          <option value="application/x-stuffit">application/x-stuffit: StuffIt archive files</option>
+</optgroup>
+	</select> 
+
+<input id="content-type-input" type="text" value="application/octet-stream" />
+
+<h3>VClock</h3>
+<input type="text" id="vclock" size="68" />
+
+<h3 id="riak-links-title" style="cursor:pointer;">Riak-Links <span>(click to show/hide)</span></h3>
+<span class="desc">Format of link: /riak/bucket/id - Tag can not be empty, format of link is strong ;)</span>
+<div id="riak-links" style="display:none;">
+<button class="add">Add Link</button><div>Link: <input type="text" value="" size="30" class="riaklink"> Riaktag: <input type="text" value="" class="riaktag"><button class="delete">Remove Link</button></div>
+</div>
+
+<h3>Body <span class="desc">An empty value of body will save if checked nothing</span></h3>
+<input type="radio" id="radio-text"/> Text
+<input type="radio" id="radio-file"/> File <span class="desc">(Only if browser support HTML5 FileReader ;) )</span>
+
+<div id="radio-text-div" style="display:none;"><textarea style="width:100%;height:100%;"></textarea></div>
+<div id="radio-file-div" style="display:none;"><input type="file" id="file" name="file" />
+<button id="stop-read-file" class="delete">Cancel read</button>
+<div id="progress-bar"><div class="percent">0%</div></div>
+</div>
+
+<p style="padding:20px 10;">
+<button id="save-document-button" class="ok">Save Document</button>
+</p>
+
+			</div> <!--End of add-document-div-->
+		</div> <!--End of display none div-->
+</body>
+</html>

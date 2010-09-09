@@ -1,0 +1,52 @@
+<html>
+<head>
+	<title>Overview - 8Protons - Riaktive: Riak DB Management Tool</title>
+	<link href="/riak/8protons.com_riaktive/favicon.ico" rel="shortcut icon">
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/jquery.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/json2.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/riak.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/riaktive.js"></script>
+  <link rel="stylesheet" href="/riak/8protons.com_riaktive/energycore.css" type="text/css" media="screen" />
+	<script type="text/javascript">
+		// Hello! Hallo! Yo! Ahoj! Hola! and more :D
+		var page = new $.riaktive.IndexPage();
+			
+		$(document).ready(function() {
+				$.riaktive.sidebar();
+
+				page.init();
+
+				$('#add-bucket-button').click(page.add_bucket);
+				
+		}); // End of Document ready
+		
+	</script>
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper"><a href="/riak/8protons.com_riaktive/index.html">Overview</a></div>
+	</div>
+<div id="Socket"></div>
+	<div id="content">
+		<div class="wrapper">			
+			<div id="control-panel">
+				Bucket Name: <input id="add-bucket-input" type="text"/><button id="add-bucket-button" class="add">Add Bucket</button>
+			</div>
+
+			<table cellspacing="0" id="riaktive-table" class="riaktive-table">
+						<caption>Buckets</caption>
+						<thead>
+							<tr>
+							  <th>Bucket Name</th>
+							  <th class="count">Number of Documents</th>
+								<th class="actions">Actions</th>
+							</tr>
+						</thead>
+						<tbody class="content"></tbody>
+			</table>
+			<div id="footer">2010 &copy; Calculated on a <a href="http://8protons.com">8Protons</a> Quantum Computer</div>
+		</div>
+	</div> <!--End of Content-->
+	<div id="sidebar"></div>
+</body>
+</html>

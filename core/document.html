@@ -1,0 +1,155 @@
+<html>
+<head>
+	<title>Overview - 8Protons - Riaktive: Riak DB Management Tool</title>
+	<link href="/riak/8protons.com_riaktive/favicon.ico" rel="shortcut icon">
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/jquery.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/json2.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/riak.js"></script>
+  <script type="text/javascript" src="/riak/8protons.com_riaktive/riaktive.js"></script>
+  <link rel="stylesheet" href="/riak/8protons.com_riaktive/energycore.css" type="text/css" media="screen" />
+	<script type="text/javascript">
+		// Hello! Hallo! Yo! Ahoj! Hola! and more :D
+		var page = new $.riaktive.DocumentPage();
+		
+		$(document).ready(function() {
+			$.riaktive.sidebar();			
+			
+			page.init();
+
+			// Content Type chooser
+			$('#document-information #content-type-select').change(page.content_type_select);
+			
+			$('#content #document-information #riak-links button.add').click(page.add_link_input);
+
+			$('#content #document-information #riak-links-title').click(function() {
+				$('#content #document-information #riak-links').slideToggle();
+			});
+
+			$('#content #document-content #radio-variant').click(page.radio_variant_click);
+
+			$('#content #document-content #radio-text').click(page.radio_text_click);
+
+			$('#content #document-content #radio-file').click(page.radio_file_click);
+
+			$('#content #save-document-button').click(page.save_document);
+			$('#content #delete-document-button').click(page.delete_document);
+
+			// File handling functions
+			$('#document-content #document-body button#stop-read-file').click(page.stop_read_file);
+			$('#document-content #document-body #file-input').change(page.handle_file_select);
+
+		}); // End of Document ready
+		
+	</script>
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper"><a href="/riak/8protons.com_riaktive/index.html">Overview</a></div>
+	</div>
+	<div id="sidebar">
+		
+	</div>
+	<div id="content">
+		<div class="wrapper">	
+			<div id="control-panel">
+				<div class="fleft"><button id="save-document-button" class="add">Save Document</button></div>
+				<div class="fright"><button id="delete-document-button" class="add">Delete Document</button></div>
+			</div>
+			<div id="document-information">
+				<h2 id="document-bucket-title"></h2>
+				<h2 id="document-key-title"></h2>
+				<h2>Content-type: </h2> 
+<select id="content-type-select">
+<option selected value="default">Default type</option>
+<optgroup label="Multipurpose files">
+          <option type="both" value="application/json">application/json: JavaScript Object Notation JSON</option>
+          <option value="application/javascript">application/javascript: JavaScript</option>
+					<option value="text/html">text/html: HTML</option>
+					<option value="text/plain">text/plain: Textual data</option>
+          <option value="text/css">text/css: Cascading Style Sheets</option>
+          <option value="application/octet-stream">application/octet-stream: Arbitrary binary data</option>
+          <option value="application/ogg">application/ogg: Ogg, a multimedia bitstream container format</option>
+          <option value="application/pdf">application/pdf: Portable Document Format</option>
+          <option value="application/soap+xml">application/soap+xml: SOAP</option>
+          <option value="application/xhtml+xml">application/xhtml+xml: XHTML</option>
+          <option value="application/xml-dtd">application/xml-dtd: DTD files</option>
+          <option value="application/zip">application/zip: ZIP archive files</option>
+          <option value="application/x-rar-compressed">application/x-rar-compressed: RAR archive files</option>
+          <option value="application/x-tar">application/x-tar: Tarball files</option>
+</optgroup>
+<optgroup label="Audio">
+          <option value="audio/mpeg">audio/mpeg: MP3 or other MPEG audio</option>
+          <option value="audio/ogg">audio/ogg: Ogg Vorbis, Speex, Flac and other audio</option>
+          <option value="audio/vorbis">audio/vorbis: Vorbis encoded audio</option>
+          <option value="audio/x-ms-wma">audio/x-ms-wma: Windows Media Audio</option>
+          <option value="audio/vnd.rn-realaudio">audio/vnd.rn-realaudio: RealAudio</option>
+          <option value="audio/vnd.wave">audio/vnd.wave: WAV audio</option>
+</optgroup>
+<optgroup label="Image">
+          <option value="image/gif">image/gif: GIF image</option>
+          <option value="image/jpeg">image/jpeg: JPEG image</option>
+          <option value="image/png">image/png: Portable Network Graphics</option>
+          <option value="image/svg+xml">image/svg+xml: SVG vector image</option>
+          <option value="image/tiff">image/tiff: Tag Image File Format</option>
+          <option value="image/vnd.microsoft.icon">image/vnd.microsoft.icon: ICO image</option>
+</optgroup>
+<optgroup label="Multipart">
+          <option value="multipart/mixed">multipart/mixed: MIME E-mail</option>
+          <option value="multipart/alternative">multipart/alternative: MIME E-mail</option>
+          <option value="multipart/related">multipart/related: MIME E-mail</option>
+          <option value="multipart/form-data">multipart/form-data: MIME Webform</option>
+          <option value="multipart/signed">multipart/signed</option>
+          <option value="multipart/encrypted">multipart/encrypted</option>
+</optgroup>
+<optgroup label="Human-readable text and source code">
+          <option value="text/csv">text/csv: Comma-separated values</option>
+          <option value="text/javascript">text/javascript (Obsolete): JavaScript</option>
+          <option value="text/xml">text/xml: Extensible Markup Language</option>
+</optgroup>
+<optgroup label="Video">
+          <option value="video/mpeg">video/mpeg: MPEG-1 vide with multiplexed audio</option>
+          <option value="video/mp4">video/mp4: MP4 video</option>
+          <option value="video/ogg">video/ogg: Ogg Theora or other vide (with audio)</option>
+          <option value="video/quicktime">video/quicktime: QuickTime video</option>
+          <option value="video/webm">video/webm: WebM open media format</option>
+          <option value="video/x-ms-wmv">video/x-ms-wmv: Windows Media Video</option>
+</optgroup>
+<optgroup label="Non-standard files">
+          <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded Form Encoded Data</option>
+          <option value="application/x-dvi">application/x-dvi: device-independent document in DVI format</option>
+          <option value="application/x-latex">application/x-latex: LaTeX files</option>
+          <option value="application/x-font-ttf">application/x-font-ttf: TrueType Font</option>
+          <option value="application/x-shockwave-flash">application/x-shockwave-flash: Adobe Flash files for example with the extension .swf</option>
+          <option value="application/x-stuffit">application/x-stuffit: StuffIt archive files</option>
+</optgroup>
+	</select> 
+
+				<input id="content-type-input" type="text" value="application/octet-stream" />
+
+				<h2>Vector Clock: </h2><input id="vclock" class="long" type="text" />
+
+				<h2 id="riak-links-title" style="cursor:pointer;">Links: <span class="desc">Click to show/hide</span></h2>
+				<div id="riak-links" style="display:none;"><button class="add">Add Link</button>
+				</div>
+				
+				<h2>Document Content: </h2>
+				<div id="document-content">
+					<input type="radio" id="radio-variant"/> View Variant Default <span class="desc">(Text, Picture or other)</span>
+					<input type="radio" id="radio-text" /> Text
+					<input type="radio" id="radio-file"/> File <span class="desc">(Only if browser support HTML5 FileReader ;) )</span>
+					<h3>Body:</h3>
+					<div id="document-body">
+						<div id="variant"></div>
+						<div id="text" style="display:none;"><textarea style="width:100%;height:100%;"></textarea></div>
+						<div id="file" style="display:none;">
+							<input type="file" id="file-input" name="file" />
+							<button id="stop-read-file" class="delete">Cancel read</button>
+							<div id="progress-bar"><div class="percent">0%</div></div></div>
+					</div>
+				</div> <!-- End of document-content div -->
+			</div>
+		</div>
+		<div id="footer">2010 &copy; Calculated on a <a href="http://8protons.com">8Protons</a> Quantum Computer</div>
+	</div> <!-- End of content div -->
+</body>
+</html>
