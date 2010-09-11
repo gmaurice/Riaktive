@@ -56,7 +56,7 @@ Comments
 
 It simple and limited by browsers bugs and features, so use this only on test servers or with low count documents buckets.
 
-Fork this if you found any bags or have a suggestion ;) WARNING! Code is a restricted area! Just kidding :D Code may looks messy in some places.
+Fork this if you found any bugs or have a suggestion ;) WARNING! Code is a restricted area! Just kidding :D Code may looks messy in some places.
 
 ToDo! ToDo! (train!)
 --------------------
