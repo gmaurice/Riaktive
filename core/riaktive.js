@@ -134,7 +134,7 @@
 
 			function get_number_of_documents(bucket_name) {
 				// Get information about number of document in bucket
-				$.getJSON('/riak/' + bucket_name + '?keys=true', function(document, status) { 
+				$.getJSON('/riak/' + bucket_name + '?keys=false', function(document, status) { 
 					if (status == 'success') {
 
 						$('#riaktive-table tbody.content tr[id="'+ document.props.name + '"] td.size').html(document.keys.length);
@@ -181,11 +181,14 @@
 					// Add link to the header
 					$("#header .wrapper").append('<a class="path" href="' + document.URL + '">' + bucket_name + '</a>');
 
-					$.getJSON('/riak/' + bucket_name + '?keys=true', function(data, status) {
+					$.getJSON('/riak/' + bucket_name + '?keys=false', function(data, status) {
 						if (status == 'success') { // b
 							current_bucket = data;
-							current_bucket_length = current_bucket.keys.length;
-							
+							if ( current_bucket.keys ){
+							         current_bucket_length = current_bucket.keys.length;
+							}else{
+							         current_bucket_length = 0;
+							}
 							// Update the Bucket Title
 							$("#bucket_name_title").html('Bucket Name: ' + bucket_name);
 
@@ -934,7 +937,12 @@
 				if (image_types.indexOf(clear_content_type) >= 0) {
 					body = '<img src="/riak/' + current_document.bucket + '/' + current_document.key + '" alt="Interesting picture" />';
 				} else if (text_types.indexOf(clear_content_type) >= 0){
-					body = '<textarea style="width:100%;height:100%;">' + current_document.body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</textarea>';
+					if ( clear_content_type === 'application/json' ){
+						body = JSON.stringify(current_document.body);
+					}else{
+						body = current_document.body;
+					}
+					body = '<textarea style="width:100%;height:100%;">' + body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</textarea>';
 				} else {
 					body = 'File with content-type: ' + clear_content_type;
 				}
